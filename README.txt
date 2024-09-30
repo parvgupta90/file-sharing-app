@@ -31,7 +31,7 @@ The system is divided into three microservices:
 
 1. **Clone the Repository**
    ```bash
-   git clone <repository_url>
+   git clone https://github.com/parvgupta90/file-sharing-app
    cd file-sharing-app
    ```
 
