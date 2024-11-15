@@ -2,3 +2,6 @@ fastapi
 uvicorn
 pymongo  # MongoDB client for Python
 requests
+
+PyJWT
+python-jose

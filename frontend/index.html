@@ -3,170 +3,228 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>File Upload</title>
-    <!-- Bootstrap CSS (for styling) -->
+    <title>File Upload & Authentication</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
     <style>
       body {
-        background-color: #f4f7fc;
+        background-color: #eef2f7;
         font-family: "Roboto", sans-serif;
       }
       .container {
         max-width: 750px;
-        margin: 50px auto;
-        padding: 40px;
+        margin: 20px auto; /* Reduced margin for less space at the top */
+        padding: 15px; /* Adjusted padding */
         background: #ffffff;
-        border-radius: 12px;
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
       }
       h2 {
-        font-size: 2rem;
+        font-size: 2.2rem;
         text-align: center;
-        margin-bottom: 30px;
-        color: #333;
-        font-weight: 600;
+        margin-bottom: 25px;
+        color: #007bff;
+        font-weight: 700;
       }
-      .form-label {
-        font-size: 1.1rem;
-        font-weight: 500;
-        color: #555;
+      .nav-tabs .nav-link {
+        color: #007bff;
+        border: none;
+        border-bottom: 2px solid transparent;
+        transition: all 0.3s;
+      }
+      .nav-tabs .nav-link.active {
+        color: #0056b3;
+        border-bottom: 2px solid #0056b3;
+        font-weight: 600;
       }
       .btn-primary {
         background-color: #007bff;
-        border-color: #007bff;
-        transition: background-color 0.3s ease-in-out;
-        padding: 10px;
-        font-size: 1.1rem;
+        border: none;
+        transition: background-color 0.3s ease;
+      }
+
+      #shareForm .mb-3 {
+        margin-bottom: 15px; /* Adjusted spacing for elements in the share form */
+      }
+
+      #qrcode {
+        margin-top: 10px;
+        display: flex;
+        justify-content: center;
       }
       .btn-primary:hover {
         background-color: #0056b3;
-        border-color: #004494;
       }
-      .btn-secondary {
-        background-color: #6c757d;
-        border-color: #6c757d;
-        margin-top: 15px;
-        width: 100%;
-        padding: 10px;
-        font-size: 1.1rem;
-      }
-      .btn-secondary:hover {
-        background-color: #565e64;
-      }
-      .text-success {
-        font-weight: bold;
-        color: #28a745;
-      }
-      .text-danger {
-        font-weight: bold;
-        color: #dc3545;
-      }
-      #result {
-        margin-top: 20px;
-      }
-      .nav-tabs {
-        border-bottom: 2px solid #dee2e6;
-      }
-      .nav-link {
-        border: none;
-        border-radius: 0;
-        font-size: 1.1rem;
+      .form-label {
+        color: #333;
         font-weight: 500;
-        color: #555;
-      }
-      .nav-link.active {
-        color: #007bff;
-        border-bottom: 3px solid #007bff;
-        background-color: transparent;
-      }
-      .table-container {
-        margin-top: 30px;
       }
       .table {
-        margin-top: 30px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        border-radius: 8px;
+        margin-top: 20px;
+        border-radius: 10px;
         overflow: hidden;
-      }
-      .table th,
-      .table td {
-        vertical-align: middle;
-        padding: 15px;
-        font-size: 1rem;
-      }
-      .table-striped tbody tr:nth-of-type(odd) {
-        background-color: #f9f9f9;
-      }
-      .btn-sm {
-        padding: 8px 12px;
-        font-size: 0.9rem;
-        border-radius: 4px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
       }
       .table-dark {
-        background-color: #343a40;
-        color: #fff;
+        background-color: #007bff;
+        color: #ffffff;
       }
-      /* Styles for the search input */
-      #searchInput {
+      .table-container {
         margin-top: 20px;
-        margin-bottom: 10px;
-        padding: 10px;
-        border-radius: 5px;
-        width: 100%;
-        border: 1px solid #ced4da;
-        font-size: 1rem;
+      }
+      input[type="text"] {
+        border-radius: 8px;
+      }
+      a {
+        color: #0056b3;
+        transition: color 0.3s;
+      }
+      a:hover {
+        color: #00376b;
       }
     </style>
   </head>
   <body>
     <div class="container">
-      <h2>File Upload & Management</h2>
+      <h2>File Upload & Authentication</h2>
 
       <!-- Nav tabs -->
       <ul class="nav nav-tabs" id="myTab" role="tablist">
-        <li class="nav-item" role="presentation">
+        <li class="nav-item">
+          <button
+            class="nav-link"
+            id="register-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#register"
+            role="tab"
+          >
+            Register
+          </button>
+        </li>
+        <li class="nav-item">
           <button
             class="nav-link active"
+            id="login-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#login"
+            role="tab"
+          >
+            Login
+          </button>
+        </li>
+        <li class="nav-item">
+          <button
+            class="nav-link"
             id="upload-tab"
             data-bs-toggle="tab"
             data-bs-target="#upload"
-            type="button"
             role="tab"
-            aria-controls="upload"
-            aria-selected="true"
           >
             Upload
           </button>
         </li>
-        <li class="nav-item" role="presentation">
+        <li class="nav-item">
           <button
             class="nav-link"
             id="uploads-tab"
             data-bs-toggle="tab"
             data-bs-target="#uploads"
-            type="button"
             role="tab"
-            aria-controls="uploads"
-            aria-selected="false"
           >
             Uploaded Files
+          </button>
+        </li>
+        <li class="nav-item">
+          <button
+            class="nav-link"
+            id="share-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#share"
+            role="tab"
+          >
+            Share File
           </button>
         </li>
       </ul>
 
       <!-- Tab content -->
       <div class="tab-content" id="myTabContent">
-        <!-- Upload Form Tab -->
+        <!-- Registration Tab -->
+        <div
+          class="tab-pane fade"
+          id="register"
+          role="tabpanel"
+          aria-labelledby="register-tab"
+        >
+          <br />
+          <div class="mb-3">
+            <label for="fullName" class="form-label">Full Name</label>
+            <input type="text" class="form-control" id="fullName" required />
+          </div>
+          <form id="registerForm" class="mt-4">
+            <div class="mb-3">
+              <label for="registerUsername" class="form-label">Username</label>
+              <input
+                type="text"
+                class="form-control"
+                id="registerUsername"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="registerPassword" class="form-label">Password</label>
+              <input
+                type="password"
+                class="form-control"
+                id="registerPassword"
+                required
+              />
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">
+              Register
+            </button>
+            <div id="registerResult" class="mt-3"></div>
+          </form>
+        </div>
+        <!-- Login Tab -->
         <div
           class="tab-pane fade show active"
+          id="login"
+          role="tabpanel"
+          aria-labelledby="login-tab"
+        >
+          <form id="loginForm" class="mt-4">
+            <div class="mb-3">
+              <label for="username" class="form-label">Username</label>
+              <input type="text" class="form-control" id="username" required />
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                required
+              />
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Login</button>
+            <div id="loginResult" class="mt-3"></div>
+          </form>
+        </div>
+
+        <!-- Upload Form Tab -->
+        <div
+          class="tab-pane fade"
           id="upload"
           role="tabpanel"
           aria-labelledby="upload-tab"
         >
-          <form id="uploadForm" class="mt-4">
+          <form id="uploadForm">
+            <br />
             <div class="mb-3">
               <label for="fileInput" class="form-label">Choose File</label>
               <input
@@ -177,8 +235,8 @@
               />
             </div>
             <button type="submit" class="btn btn-primary w-100">Upload</button>
+            <div id="result" class="mt-3"></div>
           </form>
-          <div id="result" class="mt-3"></div>
         </div>
 
         <!-- Uploaded Files Tab -->
@@ -188,115 +246,466 @@
           role="tabpanel"
           aria-labelledby="uploads-tab"
         >
-          <!-- Search box for filtering files -->
+          <br />
           <input
             type="text"
             id="searchInput"
             placeholder="Search files..."
             onkeyup="filterFiles()"
+            class="form-control mb-2"
           />
-          <div id="uploadedFiles" class="table-container table-responsive">
+          <div class="table-container table-responsive">
             <table class="table table-striped table-bordered">
               <thead class="table-dark">
                 <tr>
                   <th>#</th>
                   <th>File Name</th>
+                  <th>Size</th>
+                  <!-- New column for file size -->
                   <th>Download</th>
                 </tr>
               </thead>
-              <tbody id="fileTableBody">
-                <!-- File rows will be populated dynamically here -->
-              </tbody>
+              <tbody id="fileTableBody"></tbody>
             </table>
           </div>
+        </div>
+
+        <!-- Share File Tab -->
+        <div
+          class="tab-pane fade"
+          id="share"
+          role="tabpanel"
+          aria-labelledby="share-tab"
+        >
+          <form id="shareForm" class="mt-4">
+            <div class="mb-3">
+              <label for="fileDropdown" class="form-label">Select File</label>
+              <select id="fileDropdown" class="form-select" required>
+                <option value="">Choose a file...</option>
+                <!-- Files will be dynamically populated here -->
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <button
+                type="button"
+                class="btn btn-primary w-100"
+                onclick="generateShareableLink()"
+              >
+                Create Shareable Link
+              </button>
+
+              <div id="shareableLinkResult" class="mt-2 text-success"></div>
+              <button
+                id="copyLinkButton"
+                onclick="copyLink()"
+                class="btn btn-primary"
+              >
+                Copy Link
+              </button>
+            </div>
+            <div class="mt-3">
+              <p class="form-label">QR Code for the Shareable Link:</p>
+              <div id="qrcode"></div>
+              <!-- This div will hold the QR code -->
+            </div>
+
+            <!-- <div class="mb-3">
+              <label for="recipientEmail" class="form-label"
+                >Email Address</label
+              >
+              <input
+                type="email"
+                class="form-control"
+                id="recipientEmail"
+                placeholder="Enter recipient's email"
+                required
+              />
+            </div>
+
+            <button
+              type="button"
+              class="btn btn-secondary w-100"
+              onclick="shareFileViaEmail()"
+            >
+              Share via Email
+            </button>
+
+            <div id="emailShareResult" class="mt-2"></div> -->
+          </form>
+        </div>
+
+        <!-- Logout Button (Initially hidden) -->
+        <div
+          id="logoutContainer"
+          style="display: none; text-align: right; margin-bottom: 10px"
+        >
+          <span id="welcomeMessage"></span>
+          <button id="logoutButton" class="btn btn-danger btn-sm">
+            Logout
+          </button>
         </div>
       </div>
     </div>
 
-    <!-- JavaScript for handling the file upload and fetching uploaded files -->
+    <!-- JavaScript -->
     <script>
-      const uploadForm = document.getElementById("uploadForm");
-      const resultDiv = document.getElementById("result");
-      const fileTableBody = document.getElementById("fileTableBody");
-      const searchInput = document.getElementById("searchInput");
+      let jwtToken = "";
+      let fullName = "";
 
-      // Function to handle file upload
-      uploadForm.addEventListener("submit", async function (event) {
-        event.preventDefault();
+      // Initially hide the "Upload," "Uploaded Files," and "Share File" sections
+      document.getElementById("upload-tab").style.display = "none";
+      document.getElementById("upload").style.display = "none";
+      document.getElementById("uploads").style.display = "none";
+      document.getElementById("uploads-tab").style.display = "none";
+      document.getElementById("share-tab").style.display = "none";
+      document.getElementById("share").style.display = "none";
+      document.getElementById("logoutContainer").style.display = "none";
+      function formatFileSize(bytes) {
+        if (typeof bytes !== "number" || isNaN(bytes)) return "Unknown size";
+        if (bytes < 1024) return bytes + " B";
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + " KB";
+        return (bytes / (1024 * 1024)).toFixed(2) + " MB";
+      }
+      // Handle login
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault();
+          const username = document.getElementById("username").value;
+          const password = document.getElementById("password").value;
 
-        const fileInput = document.getElementById("fileInput").files[0];
-        if (!fileInput) {
-          resultDiv.innerHTML =
-            '<p class="text-danger">Please choose a file to upload.</p>';
+          try {
+            const response = await fetch("http://localhost:8004/login/", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ username, password }),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+              jwtToken = result.token;
+              fullName = result.full_name || "User"; // Assume full name is returned
+
+              document.getElementById(
+                "loginResult"
+              ).innerHTML = `<p class="text-success">Login successful!</p>`;
+              document.getElementById(
+                "welcomeMessage"
+              ).innerHTML = `Welcome, ${fullName}`;
+
+              // Show the "Upload," "Uploaded Files," and "Share File" sections and logout button
+              document.getElementById("upload-tab").style.display = "block";
+              document.getElementById("upload").style.display = "revert-layer";
+              document.getElementById("uploads").style.display = "revert-layer";
+              document.getElementById("uploads-tab").style.display = "block";
+              document.getElementById("share-tab").style.display = "block";
+              document.getElementById("share").style.display = "block";
+              document.getElementById("logoutContainer").style.display =
+                "block";
+
+              // Hide the "Login" and "Register" tabs after login
+              document.getElementById("login-tab").style.display = "none";
+              document.getElementById("register-tab").style.display = "none";
+
+              // Fetch and display the uploaded files for the logged-in user
+              await fetchUploadedFiles();
+              await populateFileDropdown(); // Populate dropdown for sharing files
+            } else {
+              document.getElementById(
+                "loginResult"
+              ).innerHTML = `<p class="text-danger">${
+                result.detail || "Login failed"
+              }</p>`;
+            }
+          } catch (error) {
+            document.getElementById(
+              "loginResult"
+            ).innerHTML = `<p class="text-danger">Login failed: ${error.message}</p>`;
+          }
+        });
+
+      // Handle logout
+      document
+        .getElementById("logoutButton")
+        .addEventListener("click", function () {
+          jwtToken = "";
+          fullName = "";
+          document.getElementById("welcomeMessage").textContent = "";
+          document.getElementById("upload-tab").style.display = "none";
+          document.getElementById("uploads").style.display = "none";
+          document.getElementById("upload").style.display = "none";
+          document.getElementById("uploads-tab").style.display = "none";
+          document.getElementById("share-tab").style.display = "none";
+          document.getElementById("share").style.display = "none";
+          document.getElementById("logoutContainer").style.display = "none";
+          document.getElementById("login-tab").style.display = "block";
+          document.getElementById("register-tab").style.display = "block";
+          document.getElementById("fileTableBody").innerHTML = "";
+          document.getElementById(
+            "loginResult"
+          ).innerHTML = `<p class="text-success">Logged out successfully.</p>`;
+        });
+
+      // Handle registration
+      document
+        .getElementById("registerForm")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault();
+          const username = document.getElementById("registerUsername").value;
+          const password = document.getElementById("registerPassword").value;
+          const fullName = document.getElementById("fullName").value;
+
+          try {
+            const response = await fetch("http://localhost:8004/register/", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ username, password, full_name: fullName }),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+              document.getElementById(
+                "registerResult"
+              ).innerHTML = `<p class="text-success">Registration successful! Please login.</p>`;
+            } else {
+              document.getElementById(
+                "registerResult"
+              ).innerHTML = `<p class="text-danger">${
+                result.detail || "Registration failed"
+              }</p>`;
+            }
+          } catch (error) {
+            document.getElementById(
+              "registerResult"
+            ).innerHTML = `<p class="text-danger">Registration failed: ${error.message}</p>`;
+          }
+        });
+
+      // Handle file upload
+      document
+        .getElementById("uploadForm")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault();
+          const fileInput = document.getElementById("fileInput").files[0];
+
+          if (!fileInput) {
+            document.getElementById(
+              "result"
+            ).innerHTML = `<p class="text-danger">Please choose a file.</p>`;
+            return;
+          }
+
+          const formData = new FormData();
+          formData.append("file", fileInput);
+
+          try {
+            const response = await fetch("http://localhost:8001/uploads", {
+              method: "POST",
+              headers: { Authorization: `Bearer ${jwtToken}` },
+              body: formData,
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+              document.getElementById(
+                "result"
+              ).innerHTML = `<p class="text-success">Upload successful!</p>`;
+              await fetchUploadedFiles();
+              await populateFileDropdown(); // Update dropdown for sharing files
+            } else {
+              document.getElementById(
+                "result"
+              ).innerHTML = `<p class="text-danger">Error: ${
+                result.detail || "Upload failed"
+              }</p>`;
+            }
+          } catch (error) {
+            document.getElementById(
+              "result"
+            ).innerHTML = `<p class="text-danger">An error occurred: ${error.message}</p>`;
+          }
+        });
+
+      // Fetch and display uploaded files for the logged-in user
+      // Fetch and display uploaded files for the logged-in user
+      async function fetchUploadedFiles() {
+        try {
+          const response = await fetch("http://localhost:8001/uploads", {
+            headers: { Authorization: `Bearer ${jwtToken}` },
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+
+          const files = await response.json();
+          const fileTableBody = document.getElementById("fileTableBody");
+          fileTableBody.innerHTML = "";
+
+          files.forEach((file, index) => {
+            // Format the file size
+            const fileSize = file.size
+              ? formatFileSize(file.size)
+              : "Unknown size";
+
+            // Create a row for each file with name, size, and download link
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${file.name}</td>
+                <td>${fileSize}</td>
+                <td><a href="http://localhost:8003/download/${
+                  file.name
+                }" class="btn btn-success btn-sm" target="_blank">Download</a></td>
+            `;
+            fileTableBody.appendChild(row);
+          });
+        } catch (error) {
+          console.error("Error fetching files:", error);
+        }
+      }
+
+      // Populate the dropdown for file sharing
+      async function populateFileDropdown() {
+        try {
+          const response = await fetch("http://localhost:8001/uploads", {
+            headers: { Authorization: `Bearer ${jwtToken}` },
+          });
+
+          const files = await response.json();
+          const fileDropdown = document.getElementById("fileDropdown");
+          fileDropdown.innerHTML = `<option value="">Choose a file...</option>`;
+
+          files.forEach((file) => {
+            const option = document.createElement("option");
+            option.value = file.name; // Only use the file name as the value
+            option.textContent = file.name; // Display the file name in the dropdown
+            console.log(file.name);
+
+            fileDropdown.appendChild(option);
+          });
+        } catch (error) {
+          console.error("Error fetching files:", error);
+        }
+      }
+
+      function generateQRCode(link) {
+        // Clear any existing QR code
+        const qrCodeContainer = document.getElementById("qrcode");
+        qrCodeContainer.innerHTML = ""; // Clear previous QR code, if any
+
+        // Generate new QR code
+        new QRCode(qrCodeContainer, {
+          text: link,
+          width: 128,
+          height: 128,
+        });
+      }
+      function copyLink() {
+        // Select the link to be copied
+        const linkElement = document.querySelector("#shareableLinkResult a");
+        if (!linkElement) {
+          alert("No link to copy");
           return;
         }
 
-        const formData = new FormData();
-        formData.append("file", fileInput);
+        // Copy the link to the clipboard
+        const link = linkElement.href;
+        navigator.clipboard
+          .writeText(link)
+          .then(() => {
+            alert("Link copied to clipboard!");
+          })
+          .catch((err) => console.error("Failed to copy link:", err));
+      }
+
+      // Generate a shareable link
+      async function generateShareableLink() {
+        const selectedFile = document.getElementById("fileDropdown").value;
+        if (!selectedFile) {
+          alert("Please select a file to generate a shareable link.");
+          return;
+        }
 
         try {
-          const response = await fetch("http://localhost:8001/upload/", {
+          const response = await fetch("http://localhost:8001/generate-link", {
             method: "POST",
-            body: formData,
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${jwtToken}`,
+            },
+            body: JSON.stringify({ filename: selectedFile }), // Send filename in JSON body
           });
 
           const result = await response.json();
 
           if (response.ok) {
-            resultDiv.innerHTML = `<p class="text-success">Upload successful: ${result.message}</p>`;
-            fetchUploadedFiles(); // Fetch and display uploaded files after successful upload
+            document.getElementById("shareableLinkResult").innerHTML = `
+                <p class="text-success">Shareable Link: 
+                <a href="${result.public_url}" target="_blank">${result.public_url}</a></p>`;
+            // Generate the QR code using the public_url
+            generateQRCode(result.public_url);
           } else {
-            resultDiv.innerHTML = `<p class="text-danger">Error: ${result.detail}</p>`;
+            console.error("Error generating link:", result);
+            document.getElementById("shareableLinkResult").innerHTML = `
+                <p class="text-danger">Error: ${
+                  result.detail || "Failed to generate link"
+                }</p>`;
           }
         } catch (error) {
-          resultDiv.innerHTML = `<p class="text-danger">An error occurred while uploading the file: ${error.message}</p>`;
+          console.error("Error generating link:", error);
+          document.getElementById("shareableLinkResult").innerHTML = `
+            <p class="text-danger">An error occurred: ${error.message}</p>`;
         }
-      });
+      }
 
-      // Function to fetch and display uploaded files
-      async function fetchUploadedFiles() {
+      async function shareFileViaEmail() {
+        const recipientEmail = document.getElementById("recipientEmail").value;
+        const selectedFile = document.getElementById("fileDropdown").value;
+        const emailShareResult = document.getElementById("emailShareResult");
+
+        if (!recipientEmail || !selectedFile) {
+          emailShareResult.innerHTML = `<p class="text-danger">Please enter an email address and select a file.</p>`;
+          return;
+        }
+
         try {
-          const response = await fetch("http://localhost:8001/uploads");
-          const files = await response.json();
+          const response = await fetch(
+            "http://localhost:8001/share-via-email",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${jwtToken}`,
+              },
+              body: JSON.stringify({
+                filename: selectedFile,
+                recipient_email: recipientEmail,
+              }),
+            }
+          );
 
-          // Clear the current table body
-          fileTableBody.innerHTML = "";
+          const result = await response.json();
 
-          // Assuming files is the list of filenames retrieved from the server
-          files.forEach((file, index) => {
-            const row = document.createElement("tr");
-            row.innerHTML = `
-              <td>${index + 1}</td>
-              <td>${file}</td>
-              <td><a href="http://localhost:8003/download/${file}" class="btn btn-success btn-sm">Download</a></td>
-            `;
-            fileTableBody.appendChild(row);
-          });
+          if (response.ok) {
+            emailShareResult.innerHTML = `<p class="text-success">File shared successfully via email!</p>`;
+          } else {
+            emailShareResult.innerHTML = `<p class="text-danger">Error sharing file via email: ${
+              result.detail || "Unknown error"
+            }</p>`;
+          }
         } catch (error) {
-          console.error("Error fetching uploaded files:", error);
+          console.error("Error sharing file via email:", error);
+          emailShareResult.innerHTML = `<p class="text-danger">Error sharing file via email: ${error.message}</p>`;
         }
       }
-
-      // Function to filter files based on search input
-      function filterFiles() {
-        const filter = searchInput.value.toLowerCase();
-        const rows = fileTableBody.getElementsByTagName("tr");
-
-        Array.from(rows).forEach((row) => {
-          const fileName = row.getElementsByTagName("td")[1].textContent;
-          if (fileName.toLowerCase().includes(filter)) {
-            row.style.display = "";
-          } else {
-            row.style.display = "none";
-          }
-        });
-      }
-
-      // Fetch uploaded files on page load
-      fetchUploadedFiles();
     </script>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   </body>
 </html>

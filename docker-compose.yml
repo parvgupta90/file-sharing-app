@@ -1,20 +1,39 @@
-version: "3"
+version: "3.7"
 services:
   upload_service:
     build: ./upload_service
     ports:
       - "8001:8001"
     volumes:
-      - ./uploads:/app/uploads
+      - ./uploads:/uploads
+    depends_on:
+      - user_service
+
   metadata_service:
     build: ./metadata_service
     ports:
       - "8002:8002"
     volumes:
       - ./metadata:/app/metadata
+    depends_on:
+      - user_service
+
   download_service:
     build: ./download_service
     ports:
       - "8003:8003"
     volumes:
-      - ./uploads:/app/uploads # Make sure this is consistent with upload service
+      - ./uploads:/uploads # Consistent with upload service for file access
+    depends_on:
+      - user_service
+
+  user_service:
+    build: ./user_service
+    ports:
+      - "8004:8004"
+    environment:
+      - SECRET_KEY=jtUHX6TPf9se0wtbd5fkEjG5oK7wcyGdO-d11LnA-zg # Add necessary environment variables
+
+networks:
+  default:
+    driver: bridge

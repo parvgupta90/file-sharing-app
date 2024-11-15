@@ -2,3 +2,8 @@ fastapi
 uvicorn
 requests
 python-multipart  # Needed for file uploads
+pymongo
+passlib[bcrypt]
+pyjwt
+python-jose
+pydantic[email]
